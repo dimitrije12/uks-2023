@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class inicijalnaMigracija : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace Backend.Migrations
                 name: "Branches",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -28,8 +28,10 @@ namespace Backend.Migrations
                 name: "Developers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Username = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +42,7 @@ namespace Backend.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
@@ -56,8 +58,8 @@ namespace Backend.Migrations
                 name: "DeveloperProject",
                 columns: table => new
                 {
-                    DevelopersId = table.Column<int>(type: "INTEGER", nullable: false),
-                    StarredProjectsId = table.Column<int>(type: "INTEGER", nullable: false)
+                    DevelopersId = table.Column<long>(type: "INTEGER", nullable: false),
+                    StarredProjectsId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,10 +82,10 @@ namespace Backend.Migrations
                 name: "Milestones",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
-                    ProjectId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ProjectId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,11 +102,11 @@ namespace Backend.Migrations
                 name: "PullRequests",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SourceBranchId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TargetBranchId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProjectId = table.Column<int>(type: "INTEGER", nullable: true)
+                    SourceBranchId = table.Column<long>(type: "INTEGER", nullable: false),
+                    TargetBranchId = table.Column<long>(type: "INTEGER", nullable: false),
+                    ProjectId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -132,11 +134,11 @@ namespace Backend.Migrations
                 name: "Issues",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    MilestoneId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DeveloperId = table.Column<int>(type: "INTEGER", nullable: true),
-                    ProjectId = table.Column<int>(type: "INTEGER", nullable: true)
+                    MilestoneId = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeveloperId = table.Column<long>(type: "INTEGER", nullable: true),
+                    ProjectId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -163,12 +165,12 @@ namespace Backend.Migrations
                 name: "Reactions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    DeveloperId = table.Column<int>(type: "INTEGER", nullable: true),
-                    IssueId = table.Column<int>(type: "INTEGER", nullable: true),
-                    PullRequestId = table.Column<int>(type: "INTEGER", nullable: true)
+                    DeveloperId = table.Column<long>(type: "INTEGER", nullable: true),
+                    IssueId = table.Column<long>(type: "INTEGER", nullable: true),
+                    PullRequestId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -194,13 +196,13 @@ namespace Backend.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
-                    IssueId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PullRequestId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DeveloperId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ReactionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    IssueId = table.Column<long>(type: "INTEGER", nullable: false),
+                    PullRequestId = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeveloperId = table.Column<long>(type: "INTEGER", nullable: false),
+                    ReactionId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -235,13 +237,13 @@ namespace Backend.Migrations
                 name: "Events",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Time = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    MilestoneId = table.Column<int>(type: "INTEGER", nullable: false),
-                    IssueId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PullRequestId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ReactionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MilestoneId = table.Column<long>(type: "INTEGER", nullable: false),
+                    IssueId = table.Column<long>(type: "INTEGER", nullable: false),
+                    PullRequestId = table.Column<long>(type: "INTEGER", nullable: false),
+                    ReactionId = table.Column<long>(type: "INTEGER", nullable: false),
                     Discriminator = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
                     FieldName = table.Column<string>(type: "TEXT", nullable: true),
                     OldContent = table.Column<string>(type: "TEXT", nullable: true),
@@ -300,6 +302,12 @@ namespace Backend.Migrations
                 name: "IX_DeveloperProject_StarredProjectsId",
                 table: "DeveloperProject",
                 column: "StarredProjectsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Developers_Username",
+                table: "Developers",
+                column: "Username",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_IssueId",

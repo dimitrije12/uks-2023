@@ -4,9 +4,9 @@ namespace Backend.Models
 {
     public class Reaction
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public ReactionType Type { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<Event> Events { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Event> Events { get; set; }
     }
 }

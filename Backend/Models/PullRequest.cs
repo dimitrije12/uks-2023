@@ -5,13 +5,13 @@ namespace Backend.Models
 {
     public class PullRequest
     {
-        public int Id { get; set; }
-        public int SourceBranchId { get; set; }
+        public long Id { get; set; }
+        public long SourceBranchId { get; set; }
         public Branch SourceBranch { get; set; }
-        public int TargetBranchId { get; set; }
+        public long TargetBranchId { get; set; }
         public Branch TargetBranch { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<Event> Events { get; set; }
-        public List<Reaction> Reactions { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Event> Events { get; set; }
+        public ICollection<Reaction> Reactions { get; set; }
     }
 }

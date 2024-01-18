@@ -23,6 +23,9 @@ namespace Backend.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Developer>()
+                .HasIndex(d => d.Username)
+                .IsUnique();
             modelBuilder.Entity<Project>()
                 .HasMany(p => p.Milestones)
                 .WithOne(m => m.Project)

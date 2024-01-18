@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Xml.Linq;
 
-namespace Backend.Models
+namespace Backend.Domain.Models
 {
-    public class Issue
+    public class Issue : BaseEntity
     {
-        public long Id { get; set; }
         public long MilestoneId { get; set; }
         public Milestone Milestone { get; set; }
         public ICollection<Comment> Comments { get; set; }

@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Backend.Models
+namespace Backend.Domain.Models
 {
-    public class Milestone
+    public class Milestone : BaseEntity
     {
-        public long Id { get; set; }
         public string Title { get; set; }
         public long ProjectId { get; set; }
         public Project Project { get; set; }

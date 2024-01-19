@@ -1,4 +1,4 @@
-﻿namespace Backend.Enums
+﻿namespace Backend.Domain.Enums
 {
     public enum ReactionType
     {

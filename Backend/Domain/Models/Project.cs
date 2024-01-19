@@ -1,10 +1,9 @@
-﻿using Backend.Enums;
+﻿using Backend.Domain.Enums;
 
-namespace Backend.Models
+namespace Backend.Domain.Models
 {
-    public class Project
+    public class Project : BaseEntity
     {
-        public long Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string License { get; set; }

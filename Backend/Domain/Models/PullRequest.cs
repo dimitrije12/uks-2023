@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Xml.Linq;
 
-namespace Backend.Models
+namespace Backend.Domain.Models
 {
-    public class PullRequest
+    public class PullRequest : BaseEntity
     {
-        public long Id { get; set; }
         public long SourceBranchId { get; set; }
         public Branch SourceBranch { get; set; }
         public long TargetBranchId { get; set; }

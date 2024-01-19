@@ -1,4 +1,4 @@
-﻿using Backend.Models;
+﻿using Backend.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure
@@ -23,6 +23,10 @@ namespace Backend.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<BaseEntity>().
+                Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+
             modelBuilder.Entity<Developer>()
                 .HasIndex(d => d.Username)
                 .IsUnique();

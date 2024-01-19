@@ -1,10 +1,9 @@
-﻿using Backend.Enums;
+﻿using Backend.Domain.Enums;
 
-namespace Backend.Models
+namespace Backend.Domain.Models
 {
-    public class Reaction
+    public class Reaction : BaseEntity
     {
-        public long Id { get; set; }
         public ReactionType Type { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Event> Events { get; set; }

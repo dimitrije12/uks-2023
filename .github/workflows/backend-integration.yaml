@@ -2,6 +2,8 @@ name: Pull Request Open
 
 on:
   pull_request:
+    paths:
+      - "Backend/**"
     types:
       - opened
 
@@ -26,3 +28,6 @@ jobs:
 
       - name: Test
         run: dotnet test --configuration Release --no-restore Backend/Backend.csproj
+
+      - name: Build Docker image
+        run: docker build -f Backend/Dockerfile Backend

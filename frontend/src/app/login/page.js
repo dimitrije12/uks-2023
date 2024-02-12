@@ -1,14 +1,21 @@
-'use client';
+'use client'; // This is a client component 👈🏽
 import Input from '@/components/input/input';
 import styles from './login.module.scss';
 import Button from '@/components/button/button';
-
-// This is a client component 👈🏽
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/store/reducers/user/userSlice';
+import PageWrapper from '@/layouts/pageWrapper/pageWrapper';
 
 const Login = () => {
+  const dispatch = useDispatch();
+
+  const onSubmitClick = (event) => {
+    dispatch(setUser({ username: 'test', password: '123' }));
+  };
+
   return (
-    <section className={styles.container}>
-      <div>
+    <PageWrapper>
+      <div className={styles.container}>
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Sign in to your account
@@ -39,9 +46,7 @@ const Login = () => {
                 Forgot password?
               </a>
             </div>
-            <Button onClick={() => console.log('Sign In - clicked.')}>
-              Submit
-            </Button>
+            <Button onClick={onSubmitClick}>Submit</Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?{' '}
               <a
@@ -54,7 +59,7 @@ const Login = () => {
           </form>
         </div>
       </div>
-    </section>
+    </PageWrapper>
   );
 };
 

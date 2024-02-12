@@ -1,8 +1,14 @@
+import PageWrapper, {
+  PAGE_WRAPPER_ORIENTATION,
+} from '@/layouts/pageWrapper/pageWrapper';
+
 export default function Home() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Home Page</h1>
-      <p className="text-lg mb-4">Welcome to the home page!</p>
-    </div>
+    <PageWrapper orientation={PAGE_WRAPPER_ORIENTATION.TopCenter}>
+      <div className="mx-auto px-4 mt-40 h-full">
+        <h1 className="text-3xl font-bold mb-4 text-center">Home Page</h1>
+        <p className="text-lg mb-4 text-center">Welcome to the home page!</p>
+      </div>
+    </PageWrapper>
   );
 }

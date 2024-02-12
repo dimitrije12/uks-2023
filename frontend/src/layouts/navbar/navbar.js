@@ -2,7 +2,7 @@ import Link from '@/components/link/link';
 
 const Navbar = () => {
   return (
-    <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
+    <nav className="relative px-4 py-4 flex justify-between items-center bg-white shadow-sm">
       <a className="text-3xl font-bold leading-none" href="/">
         UKS Git
       </a>

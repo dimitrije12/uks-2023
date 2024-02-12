@@ -16,3 +16,28 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+body {
+  height: 100vh;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(
+    180deg,
+    rgb(249, 250, 251) 0%,
+    rgb(249, 250, 251) 70%,
+    rgb(197, 199, 204) 97%,
+    rgb(24, 31, 131) 100%
+  );
+  /* @apply bg-gray-50; */
+}

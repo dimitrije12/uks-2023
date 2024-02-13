@@ -23,22 +23,48 @@ namespace Backend.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BaseEntity>().
-                Property(x => x.Id)
-                .ValueGeneratedOnAdd();
-
+            
             modelBuilder.Entity<Developer>()
                 .HasIndex(d => d.Username)
                 .IsUnique();
+
+            modelBuilder.Entity<Developer>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Developer>().
+                Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+
+
+
+;
             modelBuilder.Entity<Project>()
                 .HasMany(p => p.Milestones)
                 .WithOne(m => m.Project)
                 .HasForeignKey(m => m.ProjectId);
 
+
+            modelBuilder.Entity<Project>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Project>().
+                Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+
+
+
             modelBuilder.Entity<Milestone>()
                 .HasMany(m => m.Issues)
                 .WithOne(i => i.Milestone)
                 .HasForeignKey(i => i.MilestoneId);
+
+
+            modelBuilder.Entity<Milestone>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Milestone>().
+                Property(x => x.Id)
+                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Milestone>()
                 .HasMany(m => m.Events)
@@ -49,6 +75,12 @@ namespace Backend.Infrastructure
                 .HasMany(i => i.Comments)
                 .WithOne(c => c.Issue)
                 .HasForeignKey(c => c.IssueId);
+            modelBuilder.Entity<Issue>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Issue>().
+                Property(x => x.Id)
+                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Issue>()
                 .HasMany(i => i.Events)
@@ -60,6 +92,12 @@ namespace Backend.Infrastructure
                 .WithOne(c => c.PullRequest)
                 .HasForeignKey(c => c.PullRequestId);
 
+            modelBuilder.Entity<PullRequest>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<PullRequest>().
+                Property(x => x.Id)
+                .ValueGeneratedOnAdd();
             modelBuilder.Entity<PullRequest>()
                 .HasMany(pr => pr.Events)
                 .WithOne(e => e.PullRequest)
@@ -84,6 +122,13 @@ namespace Backend.Infrastructure
                 .HasMany(r => r.Comments)
                 .WithOne(c => c.Reaction)
                 .HasForeignKey(c => c.ReactionId);
+
+            modelBuilder.Entity<Reaction>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Reaction>().
+                Property(x => x.Id)
+                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Reaction>()
                 .HasMany(r => r.Events)

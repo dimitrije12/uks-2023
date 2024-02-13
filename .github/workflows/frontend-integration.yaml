@@ -1,0 +1,20 @@
+name: Dockerize Frontend
+
+on:
+  pull_request:
+    paths:
+      - "frontend/**"
+    types:
+      - opened
+
+jobs:
+  dockerize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          cd frontend && \
+          docker build -t frontend .

@@ -1,8 +1,21 @@
 import styles from './input.module.scss';
 
-const Input = ({ labelFor, labelContent, type, name, id, placeholder }) => {
+const Input = ({
+  labelFor,
+  labelContent,
+  type,
+  name,
+  id,
+  value = '',
+  placeholder,
+  onChange,
+  errorMessage,
+}) => {
+  const onChangeHandler = (event) => {
+    onChange && onChange(event);
+  };
   return (
-    <div>
+    <div className="relative pb-5">
       <label htmlFor={labelFor} className={styles.label}>
         {labelContent}
       </label>
@@ -10,10 +23,17 @@ const Input = ({ labelFor, labelContent, type, name, id, placeholder }) => {
         type={type}
         name={name}
         id={id}
+        value={value}
         className={styles.input}
         placeholder={placeholder}
         required=""
+        onChange={onChangeHandler}
       />
+      {errorMessage && (
+        <div className="text-red-500 text-sm absolute bottom-0 left-2">
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 };

@@ -4,6 +4,8 @@ import { backendUrl } from '@/environment';
 
 axios.interceptors.response.use(
   (response) => {
+    if (response?.payload?.data) return response.payload.data;
+    if (response?.data) return response.data;
     return response;
   },
   async (error) => {
@@ -28,11 +30,14 @@ const request = async (method, apiUrl, body, headers) => {
     if (refreshToken) requestHeaders['x-refresh-access-token'] = refreshToken;
 
     if (method === 'get' || method === 'delete')
-      return axios[method](backendUrl + apiUrl, { headers: requestHeaders });
-    else if (method === 'post' || method === 'put' || method === 'patch')
+      return axios[method](backendUrl + apiUrl, {
+        headers: requestHeaders,
+      });
+    else if (method === 'post' || method === 'put' || method === 'patch') {
       return axios[method](backendUrl + apiUrl, body, {
         headers: requestHeaders,
       });
+    }
   } catch (err) {
     handleError(err);
   }

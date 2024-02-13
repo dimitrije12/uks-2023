@@ -17,9 +17,14 @@ const user = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
-      const { user = {}, accessToken = '', refreshToken = '' } = action.payload;
-      storeUserToLocalStorage(user?.username, accessToken, refreshToken);
-      state.user = user;
+      if (action?.payload) {
+        const { username = '', accessToken = '' } = action.payload;
+
+        localStorageService.setAccessToken(username, accessToken);
+        localStorageService.set('username', username);
+
+        state.user = { username };
+      }
       state.error = null;
     });
 

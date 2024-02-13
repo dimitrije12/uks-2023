@@ -1,16 +1,57 @@
 'use client'; // This is a client component 👈🏽
 import Input from '@/components/input/input';
+import * as Yup from 'yup';
 import styles from './login.module.scss';
 import Button from '@/components/button/button';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/store/reducers/user/userSlice';
 import PageWrapper from '@/layouts/pageWrapper/pageWrapper';
+import { login } from '@/store/reducers/user/thunk';
+import { useState } from 'react';
 
 const Login = () => {
   const dispatch = useDispatch();
+  const [user, setUser] = useState({ username: '', password: '' });
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmitClick = (event) => {
-    dispatch(setUser({ username: 'test', password: '123' }));
+  const schema = Yup.object().shape({
+    username: Yup.string().required('Username is required'),
+    password: Yup.string().required('Password is required'),
+  });
+
+  const isFormValid = async () => {
+    try {
+      await schema.validate(user, { abortEarly: false });
+      setErrors({});
+      return true;
+    } catch (error) {
+      const validationErrors = {};
+      error.inner.forEach((e) => {
+        validationErrors[e.path] = e.message;
+      });
+      setErrors(validationErrors);
+      return false;
+    }
+  };
+
+  const onSubmitClick = async () => {
+    if (await isFormValid()) {
+      setIsLoading(true);
+
+      const res = await dispatch(login(user));
+
+      if (res?.error?.code === 'ERR_BAD_REQUEST') {
+        setErrors({
+          password: 'Wrong username or password. Please try again.',
+        });
+      }
+      setIsLoading(false);
+    }
+  };
+
+  const onInputChange = async (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   return (
@@ -22,22 +63,28 @@ const Login = () => {
           </h1>
           <form className="space-y-4 md:space-y-6" action="#">
             <Input
-              labelContent="Your email"
-              labelFor="email"
-              type="email"
-              name="email"
-              id="email"
-              placeholder="name@company.com"
+              labelContent="Your username"
+              labelFor="username"
+              type="text"
+              name="username"
+              id="username"
+              value={user.username}
+              placeholder="username"
+              onChange={(event) => onInputChange(event)}
+              errorMessage={errors.username}
             />
+
             <Input
               labelContent="Password"
               labelFor="password"
               type="password"
               name="password"
               id="password"
+              value={user.password}
               placeholder="••••••••"
+              onChange={(event) => onInputChange(event)}
+              errorMessage={errors.password}
             />
-
             <div className="flex items-center justify-end">
               <a
                 href="#"
@@ -46,7 +93,9 @@ const Login = () => {
                 Forgot password?
               </a>
             </div>
-            <Button onClick={onSubmitClick}>Submit</Button>
+            <Button onClick={onSubmitClick} isLoading={isLoading}>
+              Submit
+            </Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?{' '}
               <a

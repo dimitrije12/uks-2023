@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initalMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,6 +26,7 @@ namespace Backend.Migrations
                     Comment_ReactionId = table.Column<long>(type: "INTEGER", nullable: true),
                     Username = table.Column<string>(type: "TEXT", nullable: true),
                     Password = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
                     Time = table.Column<DateTime>(type: "TEXT", nullable: true),
                     MilestoneId = table.Column<long>(type: "INTEGER", nullable: true),
                     IssueId = table.Column<long>(type: "INTEGER", nullable: true),

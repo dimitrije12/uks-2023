@@ -110,6 +110,10 @@ namespace Backend.Migrations
                 {
                     b.HasBaseType("Backend.Domain.Models.BaseEntity");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");

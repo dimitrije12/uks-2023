@@ -15,73 +15,48 @@ namespace Backend.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
-
-            modelBuilder.Entity("Backend.Domain.Models.BaseEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BaseEntity");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseEntity");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("DeveloperProject", b =>
-                {
-                    b.Property<long>("DevelopersId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("StarredProjectsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("DevelopersId", "StarredProjectsId");
-
-                    b.HasIndex("StarredProjectsId");
-
-                    b.ToTable("DeveloperProject");
-                });
+            modelBuilder
+                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Backend.Domain.Models.Branch", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
-                    b.HasDiscriminator().HasValue("Branch");
+                    b.HasKey("Id");
+
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Comment", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<long>("DeveloperId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("IssueId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("PullRequestId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ReactionId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("DeveloperId");
 
@@ -91,61 +66,62 @@ namespace Backend.Migrations
 
                     b.HasIndex("ReactionId");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("IssueId")
-                                .HasColumnName("Comment_IssueId");
-
-                            t.Property("PullRequestId")
-                                .HasColumnName("Comment_PullRequestId");
-
-                            t.Property("ReactionId")
-                                .HasColumnName("Comment_ReactionId");
-                        });
-
-                    b.HasDiscriminator().HasValue("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Developer", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.HasDiscriminator().HasValue("Developer");
+                    b.ToTable("Developers");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Event", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("varchar(13)");
 
                     b.Property<long>("IssueId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("MilestoneId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("PullRequestId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ReactionId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("IssueId");
 
@@ -155,21 +131,29 @@ namespace Backend.Migrations
 
                     b.HasIndex("ReactionId");
 
-                    b.HasDiscriminator().HasValue("Event");
+                    b.ToTable("Events");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Event");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Issue", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("DeveloperId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("MilestoneId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("ProjectId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("DeveloperId");
 
@@ -177,80 +161,71 @@ namespace Backend.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("DeveloperId")
-                                .HasColumnName("Issue_DeveloperId");
-
-                            t.Property("MilestoneId")
-                                .HasColumnName("Issue_MilestoneId");
-                        });
-
-                    b.HasDiscriminator().HasValue("Issue");
+                    b.ToTable("Issues");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Milestone", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ProjectId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("ProjectId")
-                                .HasColumnName("Milestone_ProjectId");
-                        });
-
-                    b.HasDiscriminator().HasValue("Milestone");
+                    b.ToTable("Milestones");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Project", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("License")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Visibility")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("Title")
-                                .HasColumnName("Project_Title");
-                        });
+                    b.HasKey("Id");
 
-                    b.HasDiscriminator().HasValue("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.PullRequest", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("ProjectId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("SourceBranchId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("TargetBranchId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
 
@@ -258,30 +233,28 @@ namespace Backend.Migrations
 
                     b.HasIndex("TargetBranchId");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("ProjectId")
-                                .HasColumnName("PullRequest_ProjectId");
-                        });
-
-                    b.HasDiscriminator().HasValue("PullRequest");
+                    b.ToTable("PullRequests");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Reaction", b =>
                 {
-                    b.HasBaseType("Backend.Domain.Models.BaseEntity");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("DeveloperId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("IssueId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("PullRequestId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("DeveloperId");
 
@@ -289,19 +262,22 @@ namespace Backend.Migrations
 
                     b.HasIndex("PullRequestId");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("DeveloperId")
-                                .HasColumnName("Reaction_DeveloperId");
+                    b.ToTable("Reactions");
+                });
 
-                            t.Property("IssueId")
-                                .HasColumnName("Reaction_IssueId");
+            modelBuilder.Entity("DeveloperProject", b =>
+                {
+                    b.Property<long>("DevelopersId")
+                        .HasColumnType("bigint");
 
-                            t.Property("PullRequestId")
-                                .HasColumnName("Reaction_PullRequestId");
-                        });
+                    b.Property<long>("StarredProjectsId")
+                        .HasColumnType("bigint");
 
-                    b.HasDiscriminator().HasValue("Reaction");
+                    b.HasKey("DevelopersId", "StarredProjectsId");
+
+                    b.HasIndex("StarredProjectsId");
+
+                    b.ToTable("DeveloperProject");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.CloseEvent", b =>
@@ -338,32 +314,17 @@ namespace Backend.Migrations
 
                     b.Property<string>("FieldName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NewContent")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("OldContent")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("longtext");
 
                     b.HasDiscriminator().HasValue("UpdateEvent");
-                });
-
-            modelBuilder.Entity("DeveloperProject", b =>
-                {
-                    b.HasOne("Backend.Domain.Models.Developer", null)
-                        .WithMany()
-                        .HasForeignKey("DevelopersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Domain.Models.Project", null)
-                        .WithMany()
-                        .HasForeignKey("StarredProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Comment", b =>
@@ -502,6 +463,21 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Domain.Models.PullRequest", null)
                         .WithMany("Reactions")
                         .HasForeignKey("PullRequestId");
+                });
+
+            modelBuilder.Entity("DeveloperProject", b =>
+                {
+                    b.HasOne("Backend.Domain.Models.Developer", null)
+                        .WithMany()
+                        .HasForeignKey("DevelopersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Domain.Models.Project", null)
+                        .WithMany()
+                        .HasForeignKey("StarredProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Developer", b =>

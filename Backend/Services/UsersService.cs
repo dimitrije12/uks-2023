@@ -23,12 +23,12 @@ namespace Backend.Services
         {
             if (String.IsNullOrEmpty(newPassword) || String.IsNullOrEmpty(oldPassword))
             {
-                throw new Exception("Some values are empty!");
+                throw new ApplicationException("Some values are empty!");
             }
             Developer? developerToChangePassword = await _dbContext.Developers.FirstOrDefaultAsync(x => x.Username == username);
             if (developerToChangePassword == null)
             {
-                throw new Exception("User with that username doesn't exist! ");
+                throw new ApplicationException("User with that username doesn't exist! ");
             }
             if (BCrypt.Net.BCrypt.Verify(oldPassword, developerToChangePassword.Password))
             {
@@ -37,7 +37,7 @@ namespace Backend.Services
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
-            throw new Exception("The passwords aren't equal! ");
+            throw new ApplicationException("The passwords aren't equal! ");
         }
 
         public async Task<string> LoginAsync(string username, string password)
@@ -45,7 +45,7 @@ namespace Backend.Services
             Developer? user = await _dbContext.Developers.FirstOrDefaultAsync(x => x.Username == username);
             if (user == null)
             {
-                throw new Exception("User with that username doesn't exist!");
+                throw new ApplicationException("User with that username doesn't exist!");
             }
             if (BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
@@ -64,7 +64,7 @@ namespace Backend.Services
             }
             else
             {
-                throw new Exception("Invalid password!");
+                throw new ApplicationException("Invalid password!");
             }
         }
 
@@ -72,11 +72,11 @@ namespace Backend.Services
         {
             if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || String.IsNullOrEmpty(email))
             {
-                throw new Exception("Some values are empty!");
+                throw new ApplicationException("Some values are empty!");
             }
             if (await _dbContext.Developers.AnyAsync(x => x.Username == username || x.Email == email))
             {
-                throw new Exception("User with that email or username already exists!");
+                throw new ApplicationException("User with that email or username already exists!");
             }
             Developer? developer = new Developer { Username = username, Password = BCrypt.Net.BCrypt.HashPassword(password), Email = email };
             Developer? retVal = (await _dbContext.Developers.AddAsync(developer)).Entity;
@@ -88,12 +88,12 @@ namespace Backend.Services
         {
             if (String.IsNullOrEmpty(email))
             {
-                throw new Exception("Email value is empty! ");
+                throw new ApplicationException("Email value is empty! ");
             }
             Developer? developerToUpdate = await _dbContext.Developers.FirstOrDefaultAsync(x => x.Username == username);
             if (developerToUpdate == null)
             {
-                throw new Exception("Invalid username! ");
+                throw new ApplicationException("Invalid username! ");
             }
             developerToUpdate.Email = email;
             _dbContext.Developers.Update(developerToUpdate);

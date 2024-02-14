@@ -3,15 +3,22 @@ import { useState } from 'react';
 import Input from '@/components/input/input';
 import styles from './registration.module.scss';
 import Button from '@/components/button/button';
+import { register } from '@/store/reducers/user/thunk';
+import { useDispatch } from 'react-redux';
 
 // This is a client component 👈🏽
 
 const Registration = () => {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
+  const dispatch = useDispatch();
+
+  const [user, setUser] = useState({
+    username: '',
+    password: '',
+    repeatPassword: '',
+    email: '',
+  });
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [registerError, setRegisterError] = useState(false);
 
   const [emailError, setEmailError] = useState('');
   const [usernameError, setUsernameError] = useState('');
@@ -19,7 +26,7 @@ const Registration = () => {
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(user.email)) {
       setEmailError('Invalid email address');
       return false;
     }
@@ -28,7 +35,7 @@ const Registration = () => {
   };
 
   const validateUsername = () => {
-    if (username.length < 3) {
+    if (user.username.length < 3) {
       setUsernameError('Username must be at least 3 characters long');
       return false;
     }
@@ -37,7 +44,7 @@ const Registration = () => {
   };
 
   const validatePassword = () => {
-    if (password.length < 6) {
+    if (user.password.length < 6) {
       setPasswordError('Password must be at least 6 characters long');
       return false;
     }
@@ -50,7 +57,7 @@ const Registration = () => {
     const isUsernameValid = validateUsername();
     const isPasswordValid = validatePassword();
 
-    const doPasswordsMatch = password === repeatPassword;
+    const doPasswordsMatch = user.password === user.repeatPassword;
     setPasswordsMatch(doPasswordsMatch);
 
     if (
@@ -59,25 +66,23 @@ const Registration = () => {
       isPasswordValid &&
       doPasswordsMatch
     ) {
+      const res = dispatch(register(user));
+
+      if (res?.error?.code === 'ERR_BAD_RESPONSE') {
+        setRegisterError(true);
+      } else if (res?.payload?.response) {
+        setRegisterError(false);
+        console.log('Registration successful!');
+
+        push('/');
+      }
+
       // Poziv servisa
-      console.log('Registration successful!');
     }
   };
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleRepeatPasswordChange = (e) => {
-    setRepeatPassword(e.target.value);
+  const handleInputChange = async (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   return (
@@ -95,9 +100,9 @@ const Registration = () => {
                 type="email"
                 name="email"
                 id="email"
-                value={email}
+                value={user.email}
                 placeholder="name@company.com"
-                onChange={handleEmailChange}
+                onChange={(event) => handleInputChange(event)}
               />
               {emailError && (
                 <p className="text-sm text-red-500">{emailError}</p>
@@ -108,9 +113,9 @@ const Registration = () => {
                 type="text"
                 name="username"
                 id="username"
-                value={username}
+                value={user.username}
                 placeholder="name@company.com"
-                onChange={handleUsernameChange}
+                onChange={(event) => handleInputChange(event)}
               />
               {usernameError && (
                 <p className="text-sm text-red-500">{usernameError}</p>
@@ -121,9 +126,9 @@ const Registration = () => {
                 type="password"
                 name="password"
                 id="password"
-                value={password}
+                value={user.password}
                 placeholder="••••••••"
-                onChange={handlePasswordChange}
+                onChange={(event) => handleInputChange(event)}
               />
               {passwordError && (
                 <p className="text-sm text-red-500">{passwordError}</p>
@@ -135,14 +140,20 @@ const Registration = () => {
                 type="password"
                 name="repeatPassword"
                 id="repeatPassword"
-                value={repeatPassword}
+                value={user.repeatPassword}
                 placeholder="••••••••"
-                onChange={handleRepeatPasswordChange}
+                onChange={(event) => handleInputChange(event)}
               />
 
               {!passwordsMatch && (
                 <p className="text-sm text-red-500">
                   Passwords do not match. Please try again.
+                </p>
+              )}
+
+              {registerError && (
+                <p className="text-sm text-red-500">
+                  Email or username already exists. Please try another one.
                 </p>
               )}
 

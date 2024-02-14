@@ -73,8 +73,6 @@ const Registration = () => {
       } else if (res?.payload?.response) {
         setRegisterError(false);
         console.log('Registration successful!');
-
-        push('/');
       }
 
       // Poziv servisa

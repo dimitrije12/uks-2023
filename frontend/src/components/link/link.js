@@ -1,25 +1,19 @@
+import * as NextLink from 'next/link';
 import styles from './link.module.scss';
 
-export const LINK_VARIATIONS = {
+export const LINK_COLORS = {
   Primary: 'primary',
   Secondary: 'secondary',
 };
 
-const Link = ({
-  linkVariation = LINK_VARIATIONS.Primary,
-  href,
-  content,
-  className,
-}) => {
+const Link = ({ color = LINK_COLORS.Primary, href, content, className }) => {
   return (
-    <a
-      className={`${styles.link} ${
-        styles['variation-' + linkVariation]
-      } ${className}`}
+    <NextLink
+      className={`${styles.link} ${styles['color-' + color]} ${className}`}
       href={href}
     >
       {content}
-    </a>
+    </NextLink>
   );
 };
 

@@ -1,19 +1,22 @@
 'use client'; // This is a client component 👈🏽
-import Input from '@/components/input/input';
-import * as Yup from 'yup';
-import styles from './login.module.scss';
+
 import Button from '@/components/button/button';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@/store/reducers/user/userSlice';
+import Input from '@/components/input/input';
+import { publicRoute } from '@/components/privateRoute/privateRoute';
 import PageWrapper from '@/layouts/pageWrapper/pageWrapper';
 import { login } from '@/store/reducers/user/thunk';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
+import styles from './login.module.scss';
 
 const Login = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const { push } = useRouter();
 
   const schema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
@@ -41,11 +44,14 @@ const Login = () => {
 
       const res = await dispatch(login(user));
 
-      if (res?.error?.code === 'ERR_BAD_REQUEST') {
+      if (res?.error?.code === 'ERR_BAD_RESPONSE') {
         setErrors({
           password: 'Wrong username or password. Please try again.',
         });
+      } else if (res?.payload?.accessToken) {
+        push('/');
       }
+
       setIsLoading(false);
     }
   };
@@ -93,7 +99,11 @@ const Login = () => {
                 Forgot password?
               </a>
             </div>
-            <Button onClick={onSubmitClick} isLoading={isLoading}>
+            <Button
+              onClick={onSubmitClick}
+              isLoading={isLoading}
+              className="w-full"
+            >
               Submit
             </Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
@@ -112,4 +122,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default publicRoute(Login);

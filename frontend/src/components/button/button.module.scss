@@ -1,3 +1,9 @@
-.primaryButton {
-  @apply relative flex flex-row justify-center w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
+.button {
+  @apply relative flex flex-row justify-center rounded-xl text-sm font-bold focus:outline-none py-2 px-6 transition duration-200;
+  &.color-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white;
+  }
+  &.color-secondary {
+    @apply bg-gray-50 hover:bg-gray-100 text-gray-900;
+  }
 }

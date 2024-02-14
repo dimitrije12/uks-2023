@@ -1,12 +1,19 @@
 import Spinner from '../spinner/spinner';
 import styles from './button.module.scss';
 
+const BUTTON_COLORS = {
+  Primary: 'primary',
+  Secondary: 'secondary',
+};
+
 const Button = ({
   content,
   onClick,
   children,
   type = 'button',
+  color = BUTTON_COLORS.Primary,
   isLoading = false,
+  className,
 }) => {
   const onClickHandler = (event) => {
     onClick && !isLoading && onClick(event);
@@ -15,7 +22,7 @@ const Button = ({
   return (
     <button
       type={type}
-      className={styles.primaryButton}
+      className={`${styles.button} ${styles[`color-${color}`]} ${className}`}
       onClick={onClickHandler}
       content={content}
     >

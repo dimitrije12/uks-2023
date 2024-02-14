@@ -1,0 +1,9 @@
+.wrapper {
+  @apply flex-grow flex flex-col items-center justify-center;
+  &.orientation-center {
+    @apply items-center justify-center;
+  }
+  &.orientation-topCenter {
+    @apply items-center justify-start;
+  }
+}

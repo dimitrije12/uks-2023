@@ -95,6 +95,7 @@ const Registration = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={email}
                 placeholder="name@company.com"
                 onChange={handleEmailChange}
               />
@@ -107,6 +108,7 @@ const Registration = () => {
                 type="text"
                 name="username"
                 id="username"
+                value={username}
                 placeholder="name@company.com"
                 onChange={handleUsernameChange}
               />
@@ -119,6 +121,7 @@ const Registration = () => {
                 type="password"
                 name="password"
                 id="password"
+                value={password}
                 placeholder="••••••••"
                 onChange={handlePasswordChange}
               />
@@ -132,6 +135,7 @@ const Registration = () => {
                 type="password"
                 name="repeatPassword"
                 id="repeatPassword"
+                value={repeatPassword}
                 placeholder="••••••••"
                 onChange={handleRepeatPasswordChange}
               />

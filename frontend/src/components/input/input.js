@@ -1,29 +1,39 @@
+import styles from './input.module.scss';
+
 const Input = ({
   labelFor,
   labelContent,
   type,
   name,
   id,
+  value = '',
   placeholder,
   onChange,
+  errorMessage,
 }) => {
+  const onChangeHandler = (event) => {
+    onChange && onChange(event);
+  };
   return (
-    <div>
-      <label
-        htmlFor={labelFor}
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
+    <div className="relative pb-5">
+      <label htmlFor={labelFor} className={styles.label}>
         {labelContent}
       </label>
       <input
         type={type}
         name={name}
         id={id}
-        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        value={value}
+        className={styles.input}
         placeholder={placeholder}
         required=""
-        onChange={onChange}
+        onChange={onChangeHandler}
       />
+      {errorMessage && (
+        <div className="text-red-500 text-sm absolute bottom-0 left-2">
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,8 @@
 {
+  "env": {
+    "node": true,
+    "es6": true
+  },
   "extends": ["next", "next/core-web-vitals", "eslint:recommended"],
   "globals": {
     "React": "readonly"
@@ -11,6 +15,8 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "no-var": 2,
+    "import/no-named-as-default": 0
   }
 }

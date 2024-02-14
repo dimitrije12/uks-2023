@@ -8,4 +8,11 @@ export const userService = {
       {}
     );
   },
+  async register(user) {
+    return request(
+      'post',
+      `/api/Users/register?username=${user?.username}&password=${user?.password}&email=${user?.email}`,
+      {}
+    );
+  },
 };

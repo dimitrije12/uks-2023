@@ -1,8 +1,10 @@
 using Backend;
 using Backend.Infrastructure;
 using Backend.Interfaces;
+using Backend.Middleware;
 using Backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -14,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .Build();
+    
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -24,6 +27,9 @@ builder.Services.AddCors(options =>
                    .AllowAnyHeader();
         });
 });
+var signatureKey = builder.Configuration.GetValue("SecretKey", String.Empty) ?? throw new ApplicationException("Secret key cannot be null");
+var connectionString = builder.Configuration.GetConnectionString("ProjectDb");
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -65,7 +71,7 @@ builder.Services.AddAuthentication(opts =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = "server",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["SecretKey"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signatureKey))
 
     };
 });
@@ -78,7 +84,10 @@ builder.Services.RegisterGenericCrud();
 
 builder.Services.AddScoped<IUsersService,UsersService>();
 
-builder.Services.AddSqlite<DatabaseContext>("Data Source=ProjectDatabase.db");
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -88,6 +97,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

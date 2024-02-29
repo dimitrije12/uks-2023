@@ -1,20 +1,26 @@
-import * as NextLink from 'next/link';
+import React from 'react';
 import styles from './link.module.scss';
+import { Link } from 'react-router-dom';
 
 export const LINK_COLORS = {
   Primary: 'primary',
   Secondary: 'secondary',
 };
 
-const Link = ({ color = LINK_COLORS.Primary, href, content, className }) => {
+const CustomLink = ({
+  color = LINK_COLORS.Primary,
+  to,
+  content,
+  className,
+}) => {
   return (
-    <NextLink
+    <Link
       className={`${styles.link} ${styles['color-' + color]} ${className}`}
-      href={href}
+      to={to}
     >
       {content}
-    </NextLink>
+    </Link>
   );
 };
 
-export default Link;
+export default CustomLink;

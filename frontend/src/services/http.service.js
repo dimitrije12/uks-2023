@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { localStorageService } from './localStorage.service';
-import { backendUrl } from '@/environment';
+import { backendUrl } from '../environment';
 
 axios.interceptors.response.use(
   (response) => {

@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Spinner = ({ className }) => {
   return (
     <div role="status" className={className}>

@@ -1,3 +1,4 @@
+import React from 'react';
 import Spinner from '../spinner/spinner';
 import styles from './button.module.scss';
 

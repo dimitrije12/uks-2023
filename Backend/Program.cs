@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .Build();
-    
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -82,7 +82,9 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.RegisterGenericCrud();
 
-builder.Services.AddScoped<IUsersService,UsersService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
+
+builder.Services.AddScoped<IIssueService, IssueService>();
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {

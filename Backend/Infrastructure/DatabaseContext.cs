@@ -9,6 +9,9 @@ namespace Backend.Infrastructure
         public DbSet<Project> Projects { get; set; }
         public DbSet<Milestone> Milestones { get; set; }
         public DbSet<Issue> Issues { get; set; }
+
+        public DbSet<Label> Labels { get; set; }
+        public DbSet<IssueLabel> IssueLabels { get; set; }
         public DbSet<PullRequest> PullRequests { get; set; }
         public DbSet<Developer> Developers { get; set; }
         public DbSet<Comment> Comments { get; set; }
@@ -23,7 +26,7 @@ namespace Backend.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
             modelBuilder.Entity<Developer>()
                 .HasIndex(d => d.Username)
                 .IsUnique();
@@ -37,7 +40,20 @@ namespace Backend.Infrastructure
 
 
 
-;
+            modelBuilder.Entity<IssueLabel>()
+      .HasKey(il => new { il.IssueId, il.LabelId });
+
+            modelBuilder.Entity<IssueLabel>()
+                .HasOne(il => il.Issue)
+                .WithMany(i => i.IssueLabels)
+                .HasForeignKey(il => il.IssueId);
+
+            modelBuilder.Entity<IssueLabel>()
+                .HasOne(il => il.Label)
+                .WithMany(l => l.IssueLabels)
+                .HasForeignKey(il => il.LabelId);
+
+
             modelBuilder.Entity<Project>()
                 .HasMany(p => p.Milestones)
                 .WithOne(m => m.Project)
@@ -51,6 +67,10 @@ namespace Backend.Infrastructure
                 Property(x => x.Id)
                 .ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<Project>().
+                HasMany(p => p.Issues)
+                .WithOne(m => m.Project)
+                .HasForeignKey(m => m.ProjectId);
 
 
             modelBuilder.Entity<Milestone>()
@@ -86,6 +106,12 @@ namespace Backend.Infrastructure
                 .HasMany(i => i.Events)
                 .WithOne(e => e.Issue)
                 .HasForeignKey(e => e.IssueId);
+
+            modelBuilder.Entity<Developer>().
+                HasMany(d => d.createdIssues)
+                .WithOne(i => i.Creator)
+                .HasForeignKey(i => i.CreatorId);
+
 
             modelBuilder.Entity<PullRequest>()
                 .HasMany(pr => pr.Comments)

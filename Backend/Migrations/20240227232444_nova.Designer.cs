@@ -3,6 +3,7 @@ using System;
 using Backend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240227232444_nova")]
+    partial class nova
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,10 +157,10 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<long?>("MilestoneId")
+                    b.Property<long>("MilestoneId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ProjectId")
+                    b.Property<long?>("ProjectId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
@@ -175,21 +178,6 @@ namespace Backend.Migrations
                     b.ToTable("Issues");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Models.IssueLabel", b =>
-                {
-                    b.Property<long>("IssueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("LabelId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("IssueId", "LabelId");
-
-                    b.HasIndex("LabelId");
-
-                    b.ToTable("IssueLabels");
-                });
-
             modelBuilder.Entity("Backend.Domain.Models.Label", b =>
                 {
                     b.Property<long>("Id")
@@ -204,13 +192,18 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<long?>("IssueId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Labels");
+                    b.HasIndex("IssueId");
+
+                    b.ToTable("Label");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Milestone", b =>
@@ -471,38 +464,24 @@ namespace Backend.Migrations
 
                     b.HasOne("Backend.Domain.Models.Milestone", "Milestone")
                         .WithMany("Issues")
-                        .HasForeignKey("MilestoneId");
-
-                    b.HasOne("Backend.Domain.Models.Project", "Project")
-                        .WithMany("Issues")
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("MilestoneId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Backend.Domain.Models.Project", null)
+                        .WithMany("Issues")
+                        .HasForeignKey("ProjectId");
 
                     b.Navigation("Creator");
 
                     b.Navigation("Milestone");
-
-                    b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Models.IssueLabel", b =>
+            modelBuilder.Entity("Backend.Domain.Models.Label", b =>
                 {
-                    b.HasOne("Backend.Domain.Models.Issue", "Issue")
-                        .WithMany("IssueLabels")
-                        .HasForeignKey("IssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Domain.Models.Label", "Label")
-                        .WithMany("IssueLabels")
-                        .HasForeignKey("LabelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Issue");
-
-                    b.Navigation("Label");
+                    b.HasOne("Backend.Domain.Models.Issue", null)
+                        .WithMany("Labels")
+                        .HasForeignKey("IssueId");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Milestone", b =>
@@ -599,14 +578,9 @@ namespace Backend.Migrations
 
                     b.Navigation("Events");
 
-                    b.Navigation("IssueLabels");
+                    b.Navigation("Labels");
 
                     b.Navigation("Reactions");
-                });
-
-            modelBuilder.Entity("Backend.Domain.Models.Label", b =>
-                {
-                    b.Navigation("IssueLabels");
                 });
 
             modelBuilder.Entity("Backend.Domain.Models.Milestone", b =>

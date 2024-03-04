@@ -2,7 +2,7 @@
 {
     public class Developer : BaseEntity
     {
-      
+
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
@@ -10,5 +10,6 @@
         public ICollection<Project> StarredProjects { get; set; }
         public ICollection<Issue> AssignedIssues { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
+        public ICollection<Issue> createdIssues { get; set; }
     }
 }

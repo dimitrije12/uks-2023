@@ -1,9 +1,10 @@
-import { localStorageService } from '@/services/localStorage.service';
+import { localStorageService } from '../../../services/localStorage.service';
 import { createSlice } from '@reduxjs/toolkit';
 import { login } from './thunk';
 
 const initialState = {
   user: {},
+  loading: true,
   error: {},
 };
 
@@ -13,6 +14,12 @@ const user = createSlice({
   reducers: {
     setUser(state, action) {
       state.user = action.payload;
+    },
+    checkIfUserIsAlreadyLoggedIn(state) {
+      if (localStorageService.getAccessToken && !state?.username) {
+        state.user = { username: localStorageService.get('username') };
+        state.loading = false;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -34,15 +41,5 @@ const user = createSlice({
   },
 });
 
-export const { setUser } = user.actions;
+export const { setUser, checkIfUserIsAlreadyLoggedIn } = user.actions;
 export default user.reducer;
-
-const storeUserToLocalStorage = (
-  username = '',
-  accessToken = '',
-  refreshToken = ''
-) => {
-  localStorageService.set('username', username);
-  localStorageService.setAccessToken(accessToken);
-  localStorageService.setRefreshToken(refreshToken);
-};
